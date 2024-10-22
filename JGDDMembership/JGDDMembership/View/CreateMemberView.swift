@@ -7,246 +7,47 @@
 
 import UIKit
 
-class CreateMemberView: UIView {
-    // '프로필' 레이블
-    private let profileLabel: UILabel = {
-        let label = UILabel()
-        label.text = "프로필"
-        label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 16)
-        return label
-    }()
+final class CreateMemberView: UIView {
+    // MARK: - 프로필
+    private let profileLabel = TitleLabel("타이틀")
+    private var profileImageView1 = ProfileImageView("profile1")
+    private var profileImageView2 = ProfileImageView("profile2")
+    private lazy var profileImageStackView = CustomStackView(arrangedSubviews: [profileImageView1, profileImageView2], axis: .horizontal)
+    private lazy var profileStackView = CustomStackView(arrangedSubviews: [profileLabel, profileImageStackView])
     
-    // 프로필 선택 이미지1
-    // 🚨 --> 버튼으로 수정 필요?
-    private var profileImageView1: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "profile1")
-        imageView.frame.size.height = 40
-        return imageView
-    }()
+    // MARK: - 이름
+    private let nameLabel = TitleLabel("이름")
+    private var nameTextField = CustomTextField()
+    private lazy var nameStackView = CustomStackView(arrangedSubviews: [nameLabel, nameTextField])
     
-    // 프로필 선택 이미지2
-    // 🚨 --> 버튼으로 수정 필요?
-    private var profileImageView2: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "profile2")
-        imageView.frame.size.height = 40
-        return imageView
-    }()
+    // MARK: - 인삿말
+    private let introduceLabel = TitleLabel("인삿말")
+    private var introduceTextField = CustomTextField()
+    private lazy var introduceStackView = CustomStackView(arrangedSubviews: [introduceLabel, introduceTextField])
     
-    private lazy var profileImageStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [profileImageView1, profileImageView2])
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.spacing = 10
-        return stackView
-    }()
+    // MARK: - MBTI
+    // TODO: - 컬렉션뷰로 변경 필요
+    private let mbtiLabel = TitleLabel("MBTI")
     
-    private lazy var profileStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [profileLabel, profileImageStackView])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
+    var eButton = MbtiButton("E")
+    var iButton = MbtiButton("I")
+    private lazy var eiStackView = CustomStackView(arrangedSubviews: [eButton, iButton], axis: .horizontal)
     
-    // '이름' 레이블
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "이름"
-        label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 16)
-        return label
-    }()
+    var nButton = MbtiButton("N")
+    var sButton = MbtiButton("S")
+    private lazy var nsStackView = CustomStackView(arrangedSubviews: [nButton, sButton], axis: .horizontal)
     
-    // 이름 입력 텍스트 필드
-    private var nameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "최대 10자까지 입력 가능해요."
-        textField.layer.cornerRadius = 10
-        textField.borderStyle = .roundedRect
-        textField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        return textField
-    }()
+    var tButton = MbtiButton("T")
+    var fButton = MbtiButton("F")
+    private lazy var tfStackView = CustomStackView(arrangedSubviews: [tButton, fButton], axis: .horizontal)
     
-    private lazy var nameStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [nameLabel, nameTextField])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
+    var jButton = MbtiButton("J")
+    var pButton = MbtiButton("P")
+    private lazy var jpStackView = CustomStackView(arrangedSubviews: [jButton, pButton], axis: .horizontal)
     
-    // '인삿말' 레이블
-    private let introduceLabel: UILabel = {
-        let label = UILabel()
-        label.text = "인삿말"
-        label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 16)
-        return label
-    }()
+    private lazy var mbtiStackView = CustomStackView(arrangedSubviews: [mbtiLabel ,eiStackView, nsStackView, tfStackView, jpStackView])
     
-    // 인삿말 입력 텍스트 필드
-    private var introduceTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "최대 10자까지 입력 가능해요."
-        textField.borderStyle = .roundedRect
-        textField.layer.cornerRadius = 10
-        textField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        return textField
-    }()
-    
-    private lazy var introduceStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [introduceLabel, introduceTextField])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    // 'MBTI' 레이블
-    private let mbtiLabel: UILabel = {
-        let label = UILabel()
-        label.text = "MBTI"
-        label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 16)
-        return label
-    }()
-    
-    var eButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("E", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    var iButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("I", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    private lazy var eiStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [eButton, iButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    var nButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("N", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    var sButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("S", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    private lazy var nsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [nButton, sButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    var tButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("T", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    var fButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("F", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    private lazy var tfStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [tButton, fButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    var jButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("J", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    var pButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("P", for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    private lazy var jpStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [jButton, pButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    private lazy var mbtiStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mbtiLabel ,eiStackView, nsStackView, tfStackView, jpStackView])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 5
-        return stackView
-    }()
-    
+    // MARK: - 저장 버튼
     private var completeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .gray
@@ -258,12 +59,7 @@ class CreateMemberView: UIView {
         return button
     }()
     
-    private lazy var totalStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [profileStackView, nameStackView, introduceStackView, mbtiStackView, completeButton])
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        return stackView
-    }()
+    private lazy var totalStackView = CustomStackView(arrangedSubviews: [profileStackView, nameStackView, introduceStackView, mbtiStackView, completeButton], spacing: 20)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -288,7 +84,6 @@ class CreateMemberView: UIView {
         totalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         totalStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
-
 }
 
 extension CreateMemberView: UITextFieldDelegate {
@@ -299,8 +94,8 @@ extension CreateMemberView: UITextFieldDelegate {
                 return
             }
         }
-        // 텍스트 필드 채워져있는지 검사
-        // 🚨 프로필 선택했는지, 엠비티아이 선택했는지, 엠비티아이 정상적으로 체크됐는지 검사 추가 필요
+        
+        // TODO: - 프로필 선택했는지, 엠비티아이 선택했는지, 엠비티아이 정상적으로 체크됐는지 검사 추가 필요
         guard
             let name = nameTextField.text, !name.isEmpty,
             let introduce = introduceTextField.text, !introduce.isEmpty
