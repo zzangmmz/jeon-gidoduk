@@ -1,18 +1,12 @@
-//
-//  CreateMemberViewController.swift
-//  JGDDMembership
-//
-//  Created by JGDDMembership on 10/21/24.
-//
-
 import UIKit
 
-final class CreateMemberViewController: UIViewController , CreateMemberViewDelegate {
-    func didTapCompleteButton() {
-        self.navigationController?.popViewController(animated: true) // 네비게이션 팝 없애버리기
-    }
+
+
+final class CreateMemberViewController: UIViewController {
     
-    private let createMemberView = CreateMemberView()
+    weak var delegate: CreateMemberViewDelegate? // 데이터를 전달할 Delegate
+    
+    private let createMemberView = CreateMemberView() // 멤버 정보를 입력받는 뷰
     
     override func loadView() {
         view = createMemberView
@@ -20,22 +14,28 @@ final class CreateMemberViewController: UIViewController , CreateMemberViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 뒤로 가기 버튼 설정
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "<", style: .plain, target: self, action: #selector(backButtonTapped))
         
-        createMemberView.delegate = self // 딜리게이트로 홈화면에 넘겨주기
+        // createMemberView의 delegate 설정
+      /////  createMemberView.delegate = self
+        
+        // 키보드를 화면 터치로 내릴 수 있도록 설정
+        hideKeyboardWhenTappedAround()
     }
     
     @objc private func backButtonTapped() {
         showExitConfirmationAlert()
     }
     
-    // alert 설정
+    // 나가기 경고창 설정
     private func showExitConfirmationAlert() {
         let alert = UIAlertController(title: "나가시겠습니까?", message: nil, preferredStyle: .alert)
         
         let yes = UIAlertAction(title: "예", style: .default) { _ in
-                self.navigationController?.popViewController(animated: true)
-            }
+            self.navigationController?.popViewController(animated: true)
+        }
         let no = UIAlertAction(title: "아니요", style: .cancel)
         
         alert.addAction(yes)
@@ -46,15 +46,16 @@ final class CreateMemberViewController: UIViewController , CreateMemberViewDeleg
     
     @objc func completeButtonTapped() {
         let data = createMemberView.collectData()
-        print("Profile Image: \(data.profileImage ?? "profile1")")
-        print("Name: \(data.name)")
-        print("Introduce: \(data.introduce)")
-        print("MBTI: \(data.mbti ?? " ")")
+        
+        // 데이터를 Delegate를 통해 ViewController에 전달
+       // delegate?.didAddMember(profileImage: data.profileImage, name: data.name, introduce: data.introduce, mbti: data.mbti)
+        
+        // 이전 화면으로 이동
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
-
-// 화면 터치해서 키보드 내리기
+// 화면 터치로 키보드 내리기
 extension CreateMemberViewController {
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
@@ -66,6 +67,3 @@ extension CreateMemberViewController {
         view.endEditing(true)
     }
 }
-
-
-
