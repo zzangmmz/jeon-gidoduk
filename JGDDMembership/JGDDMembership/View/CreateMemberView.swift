@@ -169,3 +169,22 @@ extension CreateMemberView: ProfileButtonDelegate {
         }
     }
 }
+
+// 메인 화면으로 전송할 데이터
+extension CreateMemberView {
+    func collectData() -> (profileImage: String?, name: String, introduce: String, mbti: String?) {
+        // 선택한 프로필
+        let profileImage: String? = profileImageButton1.isTapped ? profileImageButton1.imageName : profileImageButton2.isTapped ? profileImageButton2.imageName : nil
+        
+        // 입력한 이름
+        let name = nameTextField.text ?? " "
+        
+        // 인삿말
+        let introduce = introduceTextField.text ?? " "
+        
+        // 선택된 MBTI 버튼
+        let mbti = [eButton, iButton, nButton, sButton, tButton, fButton, jButton, pButton].compactMap { $0.isTapped ? $0.titleLabel?.text : nil }.joined()
+        
+        return (profileImage, name, introduce, mbti)
+    }
+}

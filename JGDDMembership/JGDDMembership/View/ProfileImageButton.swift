@@ -9,6 +9,7 @@ import UIKit
 final class ProfileImageButton: UIButton {
     private var _isTapped: Bool = false
     var delegate: ProfileButtonDelegate?
+    var imageName: String
     
     var isTapped: Bool {
         get {
@@ -21,6 +22,7 @@ final class ProfileImageButton: UIButton {
     }
     
     init(_ image: String) {
+        self.imageName = image
         super.init(frame: .zero)
         
         setup(image)
@@ -33,7 +35,6 @@ final class ProfileImageButton: UIButton {
     
     private func setup(_ image: String) {
         self.setImage(UIImage(named: image), for: .normal)
-        
         self.layer.cornerRadius = 5
         self.layer.borderWidth = 7
         self.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
