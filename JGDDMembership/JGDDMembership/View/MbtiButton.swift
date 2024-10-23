@@ -8,12 +8,24 @@
 import UIKit
 
 final class MbtiButton: UIButton {
-    var isClicked: Bool = false
+    private var _isTapped: Bool = false
+    var delegate: MbtiButtonDelegate?
+    
+    var isTapped: Bool {
+        get {
+            return _isTapped
+        }
+        set {
+            _isTapped = newValue
+            self.backgroundColor = _isTapped ? .gray : .clear
+        }
+    }
     
     init(_ title: String) {
         super.init(frame: .zero)
         
         setup(title)
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -27,5 +39,13 @@ final class MbtiButton: UIButton {
         self.layer.borderWidth = 1
         self.layer.borderColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
         self.setTitleColor(.black, for: .normal)
+    }
+    
+    private func setAddTarget() {
+        self.addTarget(self, action: #selector(mbtiButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func mbtiButtonTapped() {
+        delegate?.mbtiButtonTapped(self)
     }
 }

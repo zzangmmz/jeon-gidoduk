@@ -8,7 +8,7 @@
 import UIKit
 
 class CustomStackView: UIStackView {
-    init(arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis = .vertical, spacing: CGFloat = 10, alignment: UIStackView.Alignment = .fill, distribution: UIStackView.Distribution = .fillEqually) {
+    init(axis: NSLayoutConstraint.Axis = .vertical, spacing: CGFloat = 10, alignment: UIStackView.Alignment = .fill, distribution: UIStackView.Distribution = .fill) {
         super.init(frame: .zero)
         
         self.axis = axis
@@ -21,4 +21,11 @@ class CustomStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+internal extension UIStackView {
+    func addArrangedSubviews(_ views: [UIView]) {
+        views.forEach { addArrangedSubview($0) }
+    }
+}
+
 

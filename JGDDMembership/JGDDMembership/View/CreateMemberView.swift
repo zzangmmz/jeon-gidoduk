@@ -8,63 +8,43 @@
 import UIKit
 
 final class CreateMemberView: UIView {
-    // MARK: - 프로필
+    // MARK: - UI 컴포넌트 세팅
     private let profileLabel = TitleLabel("타이틀")
-    private var profileImageView1 = ProfileImageView("profile1")
-    private var profileImageView2 = ProfileImageView("profile2")
-    private lazy var profileImageStackView = CustomStackView(arrangedSubviews: [profileImageView1, profileImageView2], axis: .horizontal)
-    private lazy var profileStackView = CustomStackView(arrangedSubviews: [profileLabel, profileImageStackView])
+    private let profileImageButton1 = ProfileImageButton("profile1")
+    private let profileImageButton2 = ProfileImageButton("profile2")
     
-    // MARK: - 이름
     private let nameLabel = TitleLabel("이름")
-    private var nameTextField = CustomTextField()
-    private lazy var nameStackView = CustomStackView(arrangedSubviews: [nameLabel, nameTextField])
+    private let nameTextField = CustomTextField()
     
-    // MARK: - 인삿말
     private let introduceLabel = TitleLabel("인삿말")
-    private var introduceTextField = CustomTextField()
-    private lazy var introduceStackView = CustomStackView(arrangedSubviews: [introduceLabel, introduceTextField])
+    private let introduceTextField = CustomTextField()
     
-    // MARK: - MBTI
-    // TODO: - 컬렉션뷰로 변경 필요
     private let mbtiLabel = TitleLabel("MBTI")
+    let eButton = MbtiButton("E")
+    let iButton = MbtiButton("I")
+    let nButton = MbtiButton("N")
+    let sButton = MbtiButton("S")
+    let tButton = MbtiButton("T")
+    let fButton = MbtiButton("F")
+    let jButton = MbtiButton("J")
+    let pButton = MbtiButton("P")
     
-    var eButton = MbtiButton("E")
-    var iButton = MbtiButton("I")
-    private lazy var eiStackView = CustomStackView(arrangedSubviews: [eButton, iButton], axis: .horizontal)
-    
-    var nButton = MbtiButton("N")
-    var sButton = MbtiButton("S")
-    private lazy var nsStackView = CustomStackView(arrangedSubviews: [nButton, sButton], axis: .horizontal)
-    
-    var tButton = MbtiButton("T")
-    var fButton = MbtiButton("F")
-    private lazy var tfStackView = CustomStackView(arrangedSubviews: [tButton, fButton], axis: .horizontal)
-    
-    var jButton = MbtiButton("J")
-    var pButton = MbtiButton("P")
-    private lazy var jpStackView = CustomStackView(arrangedSubviews: [jButton, pButton], axis: .horizontal)
-    
-    private lazy var mbtiStackView = CustomStackView(arrangedSubviews: [mbtiLabel ,eiStackView, nsStackView, tfStackView, jpStackView])
-    
-    // MARK: - 저장 버튼
-    private var completeButton: UIButton = {
+    private let completeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .gray
         button.layer.cornerRadius = 5
         button.setTitle("저장", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.isEnabled = false
-
         return button
     }()
     
-    private lazy var totalStackView = CustomStackView(arrangedSubviews: [profileStackView, nameStackView, introduceStackView, mbtiStackView, completeButton], spacing: 20)
+    private let totalStackView = CustomStackView(spacing: 30)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setup()
+        setDelegates()
+        setUI()
         setConstraints()
     }
     
@@ -72,39 +52,120 @@ final class CreateMemberView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup() {
-        backgroundColor = .white
+    private func setDelegates() {
         nameTextField.delegate = self
         introduceTextField.delegate = self
+        [eButton, iButton, nButton, sButton, tButton, fButton, jButton, pButton].forEach { $0.delegate = self }
+        [profileImageButton1, profileImageButton2].forEach { $0.delegate = self}
+    }
+    
+    // MARK: - 스택뷰 세팅
+    private func setUI() {
+        backgroundColor = .white
+        
+        // 프로필 스택뷰
+        let profileImageStackView = CustomStackView(axis: .horizontal)
+        profileImageStackView.addArrangedSubviews([profileImageButton1, profileImageButton2])
+        let profileStackView = CustomStackView()
+        profileStackView.addArrangedSubviews([profileLabel, profileImageStackView])
+        
+        // 이름 스택뷰
+        let nameStackView = CustomStackView()
+        nameStackView.addArrangedSubviews([nameLabel, nameTextField])
+        
+        // 인삿말 스택뷰
+        let introduceStackView = CustomStackView()
+        introduceStackView.addArrangedSubviews([introduceLabel, introduceTextField])
+        
+        // MBTI 스택뷰
+        // TODO: - collectionView로 수정
+        let eiStackView = CustomStackView(axis: .horizontal, distribution: .fillEqually)
+        eiStackView.addArrangedSubviews([eButton, iButton])
+        let nsStackView = CustomStackView(axis: .horizontal, distribution: .fillEqually)
+        nsStackView.addArrangedSubviews([nButton, sButton])
+        let tfStackView = CustomStackView(axis: .horizontal, distribution: .fillEqually)
+        tfStackView.addArrangedSubviews([tButton, fButton])
+        let jpStackView = CustomStackView(axis: .horizontal, distribution: .fillEqually)
+        jpStackView.addArrangedSubviews([jButton, pButton])
+        let mbtiStackView = CustomStackView()
+        mbtiStackView.addArrangedSubviews([mbtiLabel, eiStackView, nsStackView, tfStackView, jpStackView])
+        
+        // 전체 스택뷰
+        totalStackView.addArrangedSubviews([profileStackView, nameStackView, introduceStackView, mbtiStackView, completeButton])
+        
         addSubview(totalStackView)
     }
     
-    func setConstraints() {
+    // MARK: - constraints 세팅
+    private func setConstraints() {
         totalStackView.translatesAutoresizingMaskIntoConstraints = false
-        totalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        totalStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            totalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            totalStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            totalStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
+            totalStackView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.8)
+        ])
     }
 }
 
 extension CreateMemberView: UITextFieldDelegate {
     @objc private func textFieldEditingChanged(_ textField: UITextField) {
-        if textField.text?.count == 1 {
-            if textField.text?.first == " " {
-                textField.text = ""
-                return
-            }
+        // 공백만 입력된 경우
+        if let text = textField.text, text.count == 1, text.first == " " {
+            textField.text = ""
+            return
         }
         
-        // TODO: - 프로필 선택했는지, 엠비티아이 선택했는지, 엠비티아이 정상적으로 체크됐는지 검사 추가 필요
-        guard
-            let name = nameTextField.text, !name.isEmpty,
-            let introduce = introduceTextField.text, !introduce.isEmpty
-        else {
+        // 저장 버튼 활성화 여부 결정
+        guard let name = nameTextField.text, !name.isEmpty,
+              let introduce = introduceTextField.text, !introduce.isEmpty,
+              profileImageButton1.isTapped != profileImageButton2.isTapped,
+              eButton.isTapped != iButton.isTapped,
+              nButton.isTapped != sButton.isTapped,
+              tButton.isTapped != fButton.isTapped,
+              jButton.isTapped != pButton.isTapped else {
             completeButton.backgroundColor = .gray
             completeButton.isEnabled = false
             return
         }
         completeButton.backgroundColor = .black
         completeButton.isEnabled = true
+    }
+}
+
+extension CreateMemberView: MbtiButtonDelegate {
+    func mbtiButtonTapped(_ button: MbtiButton) {
+        button.isTapped.toggle()
+        
+        switch button {
+        case eButton:
+            iButton.isTapped = false
+        case iButton:
+            eButton.isTapped = false
+        case nButton:
+            sButton.isTapped = false
+        case sButton:
+            nButton.isTapped = false
+        case tButton:
+            fButton.isTapped = false
+        case fButton:
+            tButton.isTapped = false
+        case jButton:
+            pButton.isTapped = false
+        default:
+            jButton.isTapped = false
+        }
+    }
+}
+
+extension CreateMemberView: ProfileButtonDelegate {
+    func ProfileButtonTapped(_ button: ProfileImageButton) {
+        button.isTapped.toggle()
+        
+        if button == profileImageButton1 {
+            profileImageButton2.isTapped = false
+        } else if button == profileImageButton2 {
+            profileImageButton1.isTapped = false
+        }
     }
 }
