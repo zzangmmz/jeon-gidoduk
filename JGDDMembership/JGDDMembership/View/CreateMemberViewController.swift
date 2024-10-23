@@ -7,7 +7,11 @@
 
 import UIKit
 
-final class CreateMemberViewController: UIViewController {
+final class CreateMemberViewController: UIViewController , CreateMemberViewDelegate {
+    func didTapCompleteButton() {
+        self.navigationController?.popViewController(animated: true) // 네비게이션 팝 없애버리기
+    }
+    
     private let createMemberView = CreateMemberView()
     
     override func loadView() {
@@ -17,6 +21,8 @@ final class CreateMemberViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "<", style: .plain, target: self, action: #selector(backButtonTapped))
+        
+        createMemberView.delegate = self // 딜리게이트로 홈화면에 넘겨주기
     }
     
     @objc private func backButtonTapped() {

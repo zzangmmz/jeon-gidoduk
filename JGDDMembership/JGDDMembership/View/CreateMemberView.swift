@@ -7,8 +7,14 @@
 
 import UIKit
 
+
+protocol CreateMemberViewDelegate: AnyObject {
+    func didTapCompleteButton()
+} // 액션 넘기기
+
 final class CreateMemberView: UIView {
     // MARK: - UI 컴포넌트 세팅
+    weak var delegate: CreateMemberViewDelegate?
     private let profileLabel = TitleLabel("타이틀")
     private let profileImageButton1 = ProfileImageButton("profile1")
     private let profileImageButton2 = ProfileImageButton("profile2")
@@ -92,7 +98,7 @@ final class CreateMemberView: UIView {
         
         // 전체 스택뷰
         totalStackView.addArrangedSubviews([profileStackView, nameStackView, introduceStackView, mbtiStackView, completeButton])
-        
+        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)  // 올바르게 액션을 설정
         addSubview(totalStackView)
     }
     
@@ -106,7 +112,21 @@ final class CreateMemberView: UIView {
             totalStackView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.8)
         ])
     }
+    @objc private func completeButtonTapped() {
+           let data = collectData()
+           print("저장 버튼이 눌렸습니다.")
+           print("Profile Image: \(data.profileImage ?? "None")")
+           print("Name: \(data.name)")
+           print("Introduce: \(data.introduce)")
+           print("MBTI: \(data.mbti ?? "None")")
+        
+        delegate?.didTapCompleteButton() // 딜리게이트 메서드 호출
+        
+        
+       }
+    
 }
+
 
 extension CreateMemberView: UITextFieldDelegate {
     @objc private func textFieldEditingChanged(_ textField: UITextField) {
@@ -161,6 +181,29 @@ extension CreateMemberView: MbtiButtonDelegate {
         default:
             jButton.isTapped = false
         }
+        
+        updateCompleteButtonState()
+    }
+}
+
+extension CreateMemberView {
+    private func updateCompleteButtonState() {
+        guard let name = nameTextField.text, !name.isEmpty,
+              let introduce = introduceTextField.text, !introduce.isEmpty,
+              profileImageButton1.isTapped != profileImageButton2.isTapped, // 하나의 프로필 이미지 버튼이 선택되어야 함
+              (eButton.isTapped || iButton.isTapped),  // E 또는 I 버튼이 눌린 상태여야 함
+              (nButton.isTapped || sButton.isTapped),  // N 또는 S 버튼이 눌린 상태여야 함
+              (tButton.isTapped || fButton.isTapped),  // T 또는 F 버튼이 눌린 상태여야 함
+              (jButton.isTapped || pButton.isTapped)   // J 또는 P 버튼이 눌린 상태여야 함
+        else {
+            completeButton.backgroundColor = .gray
+            completeButton.isEnabled = false
+            return
+        }
+        
+        // 모든 조건을 충족한 경우 저장 버튼을 활성화
+        completeButton.backgroundColor = .black
+        completeButton.isEnabled = true
     }
 }
 
