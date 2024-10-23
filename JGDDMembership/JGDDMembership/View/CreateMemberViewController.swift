@@ -18,8 +18,8 @@ final class CreateMemberViewController: UIViewController {
         // 뒤로 가기 버튼 설정
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "<", style: .plain, target: self, action: #selector(backButtonTapped))
         
-        // createMemberView의 delegate 설정
-      /////  createMemberView.delegate = self
+//         createMemberView의 delegate 설정
+        createMemberView.delegate = self
         
         // 키보드를 화면 터치로 내릴 수 있도록 설정
         hideKeyboardWhenTappedAround()
@@ -44,15 +44,17 @@ final class CreateMemberViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    @objc func completeButtonTapped() {
-        let data = createMemberView.collectData()
-        
-        // 데이터를 Delegate를 통해 ViewController에 전달
-       // delegate?.didAddMember(profileImage: data.profileImage, name: data.name, introduce: data.introduce, mbti: data.mbti)
-        
-        // 이전 화면으로 이동
-        self.navigationController?.popViewController(animated: true)
-    }
+//    @objc func completeButtonTapped() {
+//        let data = createMemberView.collectData()
+//        
+//        // 데이터를 Delegate를 통해 ViewController에 전달
+//       // delegate?.didAddMember(profileImage: data.profileImage, name: data.name, introduce: data.introduce, mbti: data.mbti)
+//        
+//        // 이전 화면으로 이동
+////        self.navigationController?.popViewController(animated: true)
+//        self.dismiss(animated: true, completion: nil)
+//
+//    }
 }
 
 // 화면 터치로 키보드 내리기
@@ -65,5 +67,13 @@ extension CreateMemberViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+
+extension CreateMemberViewController: CreateMemberViewDelegate {
+    func didTapCompleteButton() {
+        print(self.navigationController)
+        self.navigationController?.popViewController(animated: true)
     }
 }

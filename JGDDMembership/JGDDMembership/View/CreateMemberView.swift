@@ -113,18 +113,15 @@ final class CreateMemberView: UIView {
         ])
     }
     @objc private func completeButtonTapped() {
-           let data = collectData()
-           print("저장 버튼이 눌렸습니다.")
-           print("Profile Image: \(data.profileImage ?? "None")")
-           print("Name: \(data.name)")
-           print("Introduce: \(data.introduce)")
-           print("MBTI: \(data.mbti ?? "None")")
+        let data = collectData()
+        print("저장 버튼이 눌렸습니다.")
+        print("Profile Image: \(data.profileImage ?? "None")")
+        print("Name: \(data.name)")
+        print("Introduce: \(data.introduce)")
+        print("MBTI: \(data.mbti ?? "None")")
         
         delegate?.didTapCompleteButton() // 딜리게이트 메서드 호출
-        
-        
-       }
-    
+    }
 }
 
 
