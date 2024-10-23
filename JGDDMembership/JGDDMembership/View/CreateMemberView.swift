@@ -131,6 +131,12 @@ extension CreateMemberView: UITextFieldDelegate {
         completeButton.backgroundColor = .black
         completeButton.isEnabled = true
     }
+    
+    // 엔터 누르면 키보드 내림
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 extension CreateMemberView: MbtiButtonDelegate {

@@ -22,5 +22,6 @@ final class CustomTextField: UITextField {
         self.placeholder = "최대 10자까지 입력 가능해요."
         self.layer.cornerRadius = 10
         self.borderStyle = .roundedRect
+        self.autocorrectionType = .no
     }
 }

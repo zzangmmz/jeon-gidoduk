@@ -48,4 +48,18 @@ final class CreateMemberViewController: UIViewController {
 }
 
 
+// 화면 터치해서 키보드 내리기
+extension CreateMemberViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+
 
