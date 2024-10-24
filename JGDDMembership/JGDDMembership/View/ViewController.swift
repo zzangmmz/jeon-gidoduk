@@ -89,6 +89,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // 테이블 뷰 갱신
         tableView.reloadData()
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
 
     // UITableViewDataSource 메서드 (테이블 뷰에 멤버 데이터를 표시)
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -99,6 +103,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let member = members[indexPath.row]
         cell.textLabel?.text = "\(member.name) - \(member.mbti ?? "MBTI 없음")"
+        cell.imageView?.image = UIImage(named: member.profileImage ?? " ")
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 90.0
     }
 }
