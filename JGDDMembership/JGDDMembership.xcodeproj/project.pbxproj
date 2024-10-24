@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9229D8542CC64DBD00FD0EB6 /* ProfileMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9229D8522CC64DBD00FD0EB6 /* ProfileMO+CoreDataClass.swift */; };
-		9229D8552CC64DBD00FD0EB6 /* ProfileMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9229D8532CC64DBD00FD0EB6 /* ProfileMO+CoreDataProperties.swift */; };
+		9229D8542CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9229D8522CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9229D7FC2CC638FA00FD0EB6 /* JGDDMembership.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JGDDMembership.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9229D8522CC64DBD00FD0EB6 /* ProfileMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileMO+CoreDataClass.swift"; sourceTree = "<group>"; };
-		9229D8532CC64DBD00FD0EB6 /* ProfileMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		9229D8522CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGDD_MO+CoreDataClass.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -52,8 +50,7 @@
 		9229D7F32CC638FA00FD0EB6 = {
 			isa = PBXGroup;
 			children = (
-				9229D8522CC64DBD00FD0EB6 /* ProfileMO+CoreDataClass.swift */,
-				9229D8532CC64DBD00FD0EB6 /* ProfileMO+CoreDataProperties.swift */,
+				9229D8522CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift */,
 				9229D7FE2CC638FA00FD0EB6 /* JGDDMembership */,
 				9229D7FD2CC638FA00FD0EB6 /* Products */,
 			);
@@ -141,8 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9229D8542CC64DBD00FD0EB6 /* ProfileMO+CoreDataClass.swift in Sources */,
-				9229D8552CC64DBD00FD0EB6 /* ProfileMO+CoreDataProperties.swift in Sources */,
+				9229D8542CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

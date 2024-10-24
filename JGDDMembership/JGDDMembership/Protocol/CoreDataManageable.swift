@@ -14,7 +14,7 @@ protocol CoreDataManageable {
 
 extension CoreDataManageable {
     func createCoreData(image: String, name: String, greeting: String, mbti: String) throws {
-        guard let entity = NSEntityDescription.entity(forEntityName: "Profile", in: container.viewContext) else {
+        guard let entity = NSEntityDescription.entity(forEntityName: "JGDD_MO", in: container.viewContext) else {
             throw ModelError.bindingError("saveCoreData")
         }
         
@@ -33,16 +33,16 @@ extension CoreDataManageable {
         }
     }
     
-    func readCoreData() throws -> [ProfileMO] {
+    func readCoreData() throws -> [JGDD_MO] {
         do {
-            return try container.viewContext.fetch(ProfileMO.fetchRequest())
+            return try container.viewContext.fetch(JGDD_MO.fetchRequest())
         } catch {
             throw ModelError.failureError("readCoreData")
         }
     }
     
-    func updateCoreData(_ data: ProfileMO) throws {
-        let fetchRequest = ProfileMO.fetchRequest()
+    func updateCoreData(_ data: JGDD_MO) throws {
+        let fetchRequest = JGDD_MO.fetchRequest()
         
         guard let id = data.id else {
             throw ModelError.bindingError("dataBinding")
@@ -67,8 +67,8 @@ extension CoreDataManageable {
         }
     }
     
-    func deleteCoreData(_ data: ProfileMO) throws {
-        let fetchRequest = ProfileMO.fetchRequest()
+    func deleteCoreData(_ data: JGDD_MO) throws {
+        let fetchRequest = JGDD_MO.fetchRequest()
         guard let id = data.id else {
             throw ModelError.bindingError("dataBinding")
         }
