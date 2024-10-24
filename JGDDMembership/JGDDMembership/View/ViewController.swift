@@ -53,9 +53,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // 테이블 뷰 레이아웃 설정
     func setupTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false // 오토레이아웃을 사용할때 테이블뷰의 오토레이아웃을 동적으로 정해주려면 false를 해야하나보군,
         tableView.delegate = self
-        tableView.dataSource = self
+        tableView.dataSource = self// 테이블 데이터를 관리하려면 필요한 녀석
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(tableView)
         
