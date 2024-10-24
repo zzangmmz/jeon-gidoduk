@@ -1,18 +1,9 @@
 import UIKit
 
-class ViewController: UIViewController, CreateMemberViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CreateMemberViewDelegate {
 
-    // 멤버 정보를 표시할 라벨
-    var memberInfoLabel: UILabel = {
-        let label = UILabel()
-        label.text = "멤버 정보를 추가해주세요."
-        label.textAlignment = .center
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 18)
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    // 멤버 데이터를 저장할 배열
+    var members: [(profileImage: String?, name: String, introduce: String, mbti: String?)] = []
     
     // 플레이스홀더 라벨
     var placeholderLabel: UILabel = {
@@ -24,6 +15,9 @@ class ViewController: UIViewController, CreateMemberViewDelegate {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
+    // 테이블 뷰
+    let tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,12 +36,11 @@ class ViewController: UIViewController, CreateMemberViewDelegate {
         self.view.addSubview(placeholderLabel)
         setupPlaceholderConstraints()
         
-        // 멤버 정보 라벨 추가
-        self.view.addSubview(memberInfoLabel)
-        setupMemberInfoLabelConstraints()
+        // 테이블 뷰 설정
+        setupTableView()
 
-        // 초기에는 memberInfoLabel 숨기기
-        memberInfoLabel.isHidden = true
+        // 테이블 뷰는 처음에 숨김
+        tableView.isHidden = true
     }
 
     // 플레이스홀더 라벨 레이아웃 설정
@@ -57,16 +50,23 @@ class ViewController: UIViewController, CreateMemberViewDelegate {
             placeholderLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
         ])
     }
-    
-    // 멤버 정보 라벨 레이아웃 설정
-    func setupMemberInfoLabelConstraints() {
+
+    // 테이블 뷰 레이아웃 설정
+    func setupTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(tableView)
+        
         NSLayoutConstraint.activate([
-            memberInfoLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            memberInfoLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            memberInfoLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.8)
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
-    
+
     // + 버튼을 눌렀을 때 새로운 멤버 추가 화면으로 이동
     @objc func didTapAddButton() {
         let newViewController = CreateMemberViewController()
@@ -76,17 +76,29 @@ class ViewController: UIViewController, CreateMemberViewDelegate {
 
     // CreateMemberViewDelegate 구현 (데이터 받기)
     func didTapCompleteButton(profileImage: String?, name: String, introduce: String, mbti: String?) {
-        // 전달받은 데이터를 텍스트로 표시
-        memberInfoLabel.text = """
-        이름: \(name)
-        인삿말: \(introduce)
-        MBTI: \(mbti ?? "알 수 없음")
-        """
+        // 새로운 멤버 추가
+        let newMember = (profileImage: profileImage, name: name, introduce: introduce, mbti: mbti)
+        members.append(newMember)
         
-        // 플레이스홀더 숨기기
-        placeholderLabel.isHidden = true
+        // 테이블 뷰에 멤버 데이터가 있으면 플레이스홀더 숨기고 테이블 뷰 보이기
+        if members.count > 0 {
+            placeholderLabel.isHidden = true
+            tableView.isHidden = false
+        }
         
-        // 멤버 정보 라벨 보이기
-        memberInfoLabel.isHidden = false
+        // 테이블 뷰 갱신
+        tableView.reloadData()
+    }
+
+    // UITableViewDataSource 메서드 (테이블 뷰에 멤버 데이터를 표시)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return members.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let member = members[indexPath.row]
+        cell.textLabel?.text = "\(member.name) - \(member.mbti ?? "MBTI 없음")"
+        return cell
     }
 }
