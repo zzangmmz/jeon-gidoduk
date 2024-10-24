@@ -3,6 +3,7 @@ import UIKit
 final class CreateMemberViewController: UIViewController {
     
     private let createMemberView = CreateMemberView()
+    weak var delegate: CreateMemberDelegate?
     
     override func loadView() {
         view = createMemberView
@@ -11,9 +12,8 @@ final class CreateMemberViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        // 1. CreateMemberViewController가 CreateMemberView의 delegate(CreateMemberViewDelegate)가 되면서, CreateMemberView의 이벤트(didTapCompleteButton)를 수신할 수 있게 됨.
-        createMemberView.delegate = self
         hideKeyboardWhenTappedAround()
+        createMemberView.configure(with: self)  // 이 라인이 필요합니다!
     }
     
     private func setupNavigationBar() {
@@ -39,6 +39,7 @@ final class CreateMemberViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "예", style: .default) { [weak self] _ in
             self?.navigationController?.popViewController(animated: true)
         })
+        
         alert.addAction(UIAlertAction(title: "아니요", style: .cancel))
         
         present(alert, animated: true)
@@ -53,6 +54,25 @@ final class CreateMemberViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
     }
+    
+    func createMember(image: String?, name: String, greeting: String, mbti: String?) {
+        do {
+            let _ = try ProfileManager.shared.createProfile(
+                name: name,
+                greeting: greeting,
+                mbti: mbti,
+                image: image
+            )
+            
+            print("createMember in viewController")
+            // MainViewController에 알림
+            delegate?.didCreateMember(image: image, name: name, greeting: greeting, mbti: mbti)
+            print("createMember in viewController")
+            navigationController?.popViewController(animated: true)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }
 
 // 화면 터치로 키보드 내리기
@@ -65,24 +85,5 @@ extension CreateMemberViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
-    }
-}
-
-
-extension CreateMemberViewController: CreateMemberViewDelegate {
-    // 3. CreateMemberView에서 완료 버튼이 탭되면 이 메서드가 호출됨
-    func didTapCompleteButton(image: String?, name: String, greeting: String, mbti: String?) {
-        do {
-            let _ = try ProfileManager.shared.createProfile(
-                name: name,
-                greeting: greeting,
-                mbti: mbti,
-                image: image
-            )
-            // CreateMemberView가 Pop 되면서 뒤로감.
-            navigationController?.popViewController(animated: true)
-        } catch {
-            print(error.localizedDescription)
-        }
     }
 }

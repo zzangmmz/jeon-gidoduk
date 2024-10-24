@@ -9,7 +9,9 @@ import UIKit
 
 final class CreateMemberView: UIView {
     // MARK: - UI 컴포넌트 세팅
-    weak var delegate: CreateMemberViewDelegate? // 위임자 내부에 있는 didTapCompleteButton 사용하기 위해 약한 참조
+    
+    private weak var viewController: CreateMemberViewController?
+
     private let profileLabel = TitleLabel("프로필 이미지")
     private let profileImageButton1 = ProfileImageButton("profile1")
     private let profileImageButton2 = ProfileImageButton("profile2")
@@ -47,6 +49,11 @@ final class CreateMemberView: UIView {
         setDelegates()
         setUI()
         setConstraints()
+    }
+    
+    // 초기화 시 ViewController 설정
+    func configure(with viewController: CreateMemberViewController) {
+        self.viewController = viewController
     }
     
     required init?(coder: NSCoder) {
@@ -109,12 +116,16 @@ final class CreateMemberView: UIView {
     }
     
     @objc private func completeButtonTapped() {
+        // 데이터 수집
         let image: String? = profileImageButton1.isTapped ? profileImageButton1.imageName : profileImageButton2.isTapped ? profileImageButton2.imageName : nil
         let name = nameTextField.text ?? " "
         let greeting = introduceTextField.text ?? " "
-        let mbti = [eButton, iButton, nButton, sButton, tButton, fButton, jButton, pButton].compactMap { $0.isTapped ? $0.titleLabel?.text : nil }.joined()
-        // 1. delegate 내부 메서드 호출
-        delegate?.didTapCompleteButton(image: image, name: name, greeting: greeting, mbti: mbti)
+        let mbti = [eButton, iButton, nButton, sButton, tButton, fButton, jButton, pButton]
+            .compactMap { $0.isTapped ? $0.titleLabel?.text : nil }
+            .joined()
+        print("completeButtonTapped")
+        // ViewController의 메서드 직접 호출
+        viewController?.createMember(image: image, name: name, greeting: greeting, mbti: mbti)
     }
 }
 
