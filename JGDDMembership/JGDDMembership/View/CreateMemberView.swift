@@ -7,16 +7,12 @@
 
 import UIKit
 
-
-protocol CreateMemberViewDelegate: AnyObject {
-   // func didTapCompleteButton()
-    func didTapCompleteButton(profileImage: String?, name: String, introduce: String, mbti: String?)
-} // 액션 넘기기 여기서 액션을 넘겨주고,
-
 final class CreateMemberView: UIView {
     // MARK: - UI 컴포넌트 세팅
-    weak var delegate: CreateMemberViewDelegate?
-    private let profileLabel = TitleLabel("타이틀")
+    
+    private weak var viewController: CreateMemberViewController?
+
+    private let profileLabel = TitleLabel("프로필 이미지")
     private let profileImageButton1 = ProfileImageButton("profile1")
     private let profileImageButton2 = ProfileImageButton("profile2")
     
@@ -53,6 +49,11 @@ final class CreateMemberView: UIView {
         setDelegates()
         setUI()
         setConstraints()
+    }
+    
+    // 초기화 시 ViewController 설정
+    func configure(with viewController: CreateMemberViewController) {
+        self.viewController = viewController
     }
     
     required init?(coder: NSCoder) {
@@ -113,15 +114,18 @@ final class CreateMemberView: UIView {
             totalStackView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.8)
         ])
     }
+    
     @objc private func completeButtonTapped() {
-        let data = collectData()
-        print("저장 버튼이 눌렸습니다.")
-        print("Profile Image: \(data.profileImage ?? "None")")
-        print("Name: \(data.name)")
-        print("Introduce: \(data.introduce)")
-        print("MBTI: \(data.mbti ?? "None")")
-        
-        delegate?.didTapCompleteButton(profileImage: data.profileImage, name: data.name, introduce: data.introduce, mbti: data.mbti)
+        // 데이터 수집
+        let image: String? = profileImageButton1.isTapped ? profileImageButton1.imageName : profileImageButton2.isTapped ? profileImageButton2.imageName : nil
+        let name = nameTextField.text ?? " "
+        let greeting = introduceTextField.text ?? " "
+        let mbti = [eButton, iButton, nButton, sButton, tButton, fButton, jButton, pButton]
+            .compactMap { $0.isTapped ? $0.titleLabel?.text : nil }
+            .joined()
+        print("completeButtonTapped")
+        // ViewController의 메서드 직접 호출
+        viewController?.createMember(image: image, name: name, greeting: greeting, mbti: mbti)
     }
 }
 
@@ -182,9 +186,7 @@ extension CreateMemberView: MbtiButtonDelegate {
         
         updateCompleteButtonState()
     }
-}
-
-extension CreateMemberView {
+    
     private func updateCompleteButtonState() {
         guard let name = nameTextField.text, !name.isEmpty,
               let introduce = introduceTextField.text, !introduce.isEmpty,
@@ -199,7 +201,6 @@ extension CreateMemberView {
             return
         }
         
-        // 모든 조건을 충족한 경우 저장 버튼을 활성화
         completeButton.backgroundColor = .black
         completeButton.isEnabled = true
     }
@@ -214,24 +215,5 @@ extension CreateMemberView: ProfileButtonDelegate {
         } else if button == profileImageButton2 {
             profileImageButton1.isTapped = false
         }
-    }
-}
-
-// 메인 화면으로 전송할 데이터
-extension CreateMemberView {
-    func collectData() -> (profileImage: String?, name: String, introduce: String, mbti: String?) {
-        // 선택한 프로필
-        let profileImage: String? = profileImageButton1.isTapped ? profileImageButton1.imageName : profileImageButton2.isTapped ? profileImageButton2.imageName : nil
-        
-        // 입력한 이름
-        let name = nameTextField.text ?? " "
-        
-        // 인삿말
-        let introduce = introduceTextField.text ?? " "
-        
-        // 선택된 MBTI 버튼
-        let mbti = [eButton, iButton, nButton, sButton, tButton, fButton, jButton, pButton].compactMap { $0.isTapped ? $0.titleLabel?.text : nil }.joined()
-        
-        return (profileImage, name, introduce, mbti)
     }
 }
