@@ -5,10 +5,12 @@
 //  Created by 이명지 on 10/23/24.
 //
 
+// 프로토콜 정의
 protocol MbtiButtonDelegate: AnyObject {
     func mbtiButtonTapped(_ button: MbtiButton)
 }
 
+// 기본 구현 제공
 extension MbtiButtonDelegate {
     func handleMbtiSelection(_ mbti: String, for profile: JGDD_MO) {
         do {
@@ -19,7 +21,7 @@ extension MbtiButtonDelegate {
     }
 }
 
-
+// MARK: - ProfileButton
 protocol ProfileButtonDelegate: AnyObject {
     func ProfileButtonTapped(_ button: ProfileImageButton)
 }
