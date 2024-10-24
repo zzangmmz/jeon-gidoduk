@@ -8,7 +8,6 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -16,15 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        // 시작할 ViewController 설정
-        let viewController = ViewController()
+        let mainViewController = MainViewController()
+        let navigationController = UINavigationController(rootViewController: mainViewController)
         
-        // UINavigationController로 감싸기
-        let navigationController = UINavigationController(rootViewController: viewController)
-        
-        // window의 rootViewController를 네비게이션 컨트롤러로 설정
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
-    
 }

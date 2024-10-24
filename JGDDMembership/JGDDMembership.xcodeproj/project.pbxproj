@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9229D8542CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9229D8522CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift */; };
+		E5626FAF2CC9F5B400C631C0 /* JGDD_MO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626FAD2CC9F5B400C631C0 /* JGDD_MO+CoreDataClass.swift */; };
+		E5626FB02CC9F5B400C631C0 /* JGDD_MO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626FAE2CC9F5B400C631C0 /* JGDD_MO+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9229D7FC2CC638FA00FD0EB6 /* JGDDMembership.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JGDDMembership.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9229D8522CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGDD_MO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E5626FAD2CC9F5B400C631C0 /* JGDD_MO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGDD_MO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E5626FAE2CC9F5B400C631C0 /* JGDD_MO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGDD_MO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -50,7 +52,8 @@
 		9229D7F32CC638FA00FD0EB6 = {
 			isa = PBXGroup;
 			children = (
-				9229D8522CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift */,
+				E5626FAD2CC9F5B400C631C0 /* JGDD_MO+CoreDataClass.swift */,
+				E5626FAE2CC9F5B400C631C0 /* JGDD_MO+CoreDataProperties.swift */,
 				9229D7FE2CC638FA00FD0EB6 /* JGDDMembership */,
 				9229D7FD2CC638FA00FD0EB6 /* Products */,
 			);
@@ -138,7 +141,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9229D8542CC64DBD00FD0EB6 /* JGDD_MO+CoreDataClass.swift in Sources */,
+				E5626FAF2CC9F5B400C631C0 /* JGDD_MO+CoreDataClass.swift in Sources */,
+				E5626FB02CC9F5B400C631C0 /* JGDD_MO+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
