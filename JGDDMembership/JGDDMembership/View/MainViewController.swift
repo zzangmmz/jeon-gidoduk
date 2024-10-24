@@ -17,7 +17,6 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
-//        
 //        // 데이터 변경 알림 구독
         NotificationCenter.default.addObserver(
             self,
@@ -76,14 +75,15 @@ class MainViewController: UIViewController {
     }
     
     @objc private func handleDataChange() {
+        print("data changed")
         loadProfiles()
     }
     
     // MARK: - Data Loading
     private func loadProfiles() {
         do {
-            print("loadingProfiles")
             let profiles = try ProfileManager.shared.fetchProfiles()
+            print(profiles.debugDescription)
             updateUI(isEmpty: profiles.isEmpty)
             tableView.reloadData()
         } catch {
@@ -92,8 +92,13 @@ class MainViewController: UIViewController {
     }
     
     private func updateUI(isEmpty: Bool) {
-        placeholderLabel.isHidden = !isEmpty //비어있지 않으면, placeholder 숨기기!
-        tableView.isHidden = isEmpty // 비어있으면 테이블 뷰 감추기
+        if isEmpty {
+            placeholderLabel.isHidden = false
+            tableView.isHidden = true
+        } else {
+            placeholderLabel.isHidden = true
+            tableView.isHidden = false
+        }
     }
     
     private func showError(message: String) {
@@ -118,6 +123,9 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             do {
                 let profiles = try ProfileManager.shared.fetchProfiles()
+                if !profiles.isEmpty {
+                    self.placeholderLabel.isHidden = true
+                }
                 let member = profiles[indexPath.row]
                 cell.textLabel?.text = "\(member.name ?? "사용자") - \(member.mbti ?? "MBTI 없음")"
                 cell.imageView?.image = UIImage(named: member.image ?? "person.fill")

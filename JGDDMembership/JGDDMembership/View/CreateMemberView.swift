@@ -113,6 +113,7 @@ final class CreateMemberView: UIView {
             totalStackView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.8)
         ])
     }
+    
     @objc private func completeButtonTapped() {
         let data = collectData()
         print("저장 버튼이 눌렸습니다.")
