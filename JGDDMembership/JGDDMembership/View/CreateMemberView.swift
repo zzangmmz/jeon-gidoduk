@@ -101,6 +101,8 @@ final class CreateMemberView: UIView {
         // 전체 스택뷰
         totalStackView.addArrangedSubviews([profileStackView, nameStackView, introduceStackView, mbtiStackView, completeButton])
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)  // 올바르게 액션을 설정
+        nameTextField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        introduceTextField.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
         addSubview(totalStackView)
     }
     
@@ -135,23 +137,9 @@ extension CreateMemberView: UITextFieldDelegate {
         // 공백만 입력된 경우
         if let text = textField.text, text.count == 1, text.first == " " {
             textField.text = ""
-            return
         }
         
-        // 저장 버튼 활성화 여부 결정
-        guard let name = nameTextField.text, !name.isEmpty,
-              let introduce = introduceTextField.text, !introduce.isEmpty,
-              profileImageButton1.isTapped != profileImageButton2.isTapped,
-              eButton.isTapped != iButton.isTapped,
-              nButton.isTapped != sButton.isTapped,
-              tButton.isTapped != fButton.isTapped,
-              jButton.isTapped != pButton.isTapped else {
-            completeButton.backgroundColor = .gray
-            completeButton.isEnabled = false
-            return
-        }
-        completeButton.backgroundColor = .black
-        completeButton.isEnabled = true
+        updateCompleteButtonState()
     }
     
     // 엔터 누르면 키보드 내림
@@ -215,5 +203,7 @@ extension CreateMemberView: ProfileButtonDelegate {
         } else if button == profileImageButton2 {
             profileImageButton1.isTapped = false
         }
+        
+        updateCompleteButtonState()
     }
 }
