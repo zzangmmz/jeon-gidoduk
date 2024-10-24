@@ -4,7 +4,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // 멤버 데이터를 저장할 배열
     var members: [(profileImage: String?, name: String, introduce: String, mbti: String?)] = []
-    
+
     // 플레이스홀더 라벨
     var placeholderLabel: UILabel = {
         let label = UILabel()
@@ -103,11 +103,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let member = members[indexPath.row]
         cell.textLabel?.text = "\(member.name) - \(member.mbti ?? "MBTI 없음")"
-        cell.imageView?.image = UIImage(named: member.profileImage ?? " ")
+        cell.imageView?.image = UIImage(named: member.profileImage ?? "person.fill")
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90.0
+    }
+
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    // 왼쪽으로 슬라이드하여 삭제
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            members.remove(at: indexPath.row)
+            
+            
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+           
+            if members.isEmpty {
+                placeholderLabel.isHidden = false
+                tableView.isHidden = true
+            }
+        }
     }
 }
