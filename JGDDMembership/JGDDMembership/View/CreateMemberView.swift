@@ -9,8 +9,9 @@ import UIKit
 
 
 protocol CreateMemberViewDelegate: AnyObject {
-    func didTapCompleteButton()
-} // 액션 넘기기
+   // func didTapCompleteButton()
+    func didTapCompleteButton(profileImage: String?, name: String, introduce: String, mbti: String?)
+} // 액션 넘기기 여기서 액션을 넘겨주고,
 
 final class CreateMemberView: UIView {
     // MARK: - UI 컴포넌트 세팅
@@ -120,7 +121,7 @@ final class CreateMemberView: UIView {
         print("Introduce: \(data.introduce)")
         print("MBTI: \(data.mbti ?? "None")")
         
-        delegate?.didTapCompleteButton() // 딜리게이트 메서드 호출
+        delegate?.didTapCompleteButton(profileImage: data.profileImage, name: data.name, introduce: data.introduce, mbti: data.mbti)
     }
 }
 

@@ -69,11 +69,12 @@ extension CreateMemberViewController {
         view.endEditing(true)
     }
 }
-
-
-extension CreateMemberViewController: CreateMemberViewDelegate {
-    func didTapCompleteButton() {
-        print(self.navigationController)
-        self.navigationController?.popViewController(animated: true)
+//여기에서 데이터를 받는 거고 
+extension CreateMemberViewController : CreateMemberViewDelegate {
+    func didTapCompleteButton(profileImage: String?, name: String, introduce: String, mbti: String?) {
+        delegate?.didTapCompleteButton(profileImage: profileImage, name: name, introduce: introduce, mbti: mbti)
+                self.navigationController?.popViewController(animated: true)
     }
+    
+    
 }
