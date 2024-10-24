@@ -18,13 +18,6 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNavigationBar()
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleDataChange),
-            name: .memberDataDidChange,
-            object: nil
-        )
     }
     
     private func setupUI() {
@@ -69,9 +62,10 @@ class MainViewController: UIViewController {
     // + 버튼을 눌렀을 때 새로운 멤버 추가 화면으로 이동
     @objc private func didTapAddButton() {
         let newViewController = CreateMemberViewController()
-//        newViewController.delegate = self
+        newViewController.delegate = self
         navigationController?.pushViewController(newViewController, animated: true)
     }
+    
     
     @objc private func handleDataChange() {
         print("data changed")
@@ -163,10 +157,9 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// CreateMemberViewDelegate 구현 (데이터 받기)
-extension MainViewController: CreateMemberViewDelegate {
-    func didTapCompleteButton(image: String?, name: String, greeting: String, mbti: String?) {
-        // 테이블 뷰 갱신
-        tableView.reloadData()
+extension MainViewController: CreateMemberDelegate {
+    func didCreateMember(image: String?, name: String, greeting: String, mbti: String?) {
+        print("didCreateMember in MainViewController")
+        loadProfiles()
     }
 }

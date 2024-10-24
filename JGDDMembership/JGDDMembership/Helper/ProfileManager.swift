@@ -50,7 +50,6 @@ final class ProfileManager {
         
         do {
             try context.save()
-            NotificationCenter.default.post(name: .memberDataDidChange, object: nil)
             return profile
         } catch {
             // 만일 에러 발생 시, CoreData 객체에 발생할 수 있는 사이드 이펙 막기 위해 이전 상태로 롤백
@@ -101,7 +100,6 @@ final class ProfileManager {
         
         do {
             try context.save()
-            NotificationCenter.default.post(name: .memberDataDidChange, object: nil)
         } catch {
             context.rollback()
             throw ProfileError.updateFailed
